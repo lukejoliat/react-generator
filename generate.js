@@ -4,6 +4,7 @@
 exports.__esModule = true;
 exports.generator = void 0;
 var service_generator_1 = require("./service-generator");
+var fs_1 = require("fs");
 var generator = function () {
     var courseSchema = {
         model: 'course',
@@ -15,6 +16,10 @@ var generator = function () {
         scope: 'acme'
     };
     var result = (0, service_generator_1.generate)(courseSchema, config);
-    console.log(result);
+    (0, fs_1.writeFile)(result.fileName, result.template, function (err) {
+        if (err)
+            console.log(err);
+    });
 };
 exports.generator = generator;
+(0, exports.generator)();

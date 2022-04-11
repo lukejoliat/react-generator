@@ -3,6 +3,7 @@
 
 import { Config, Schema } from "./meta-models";
 import { generate } from "./service-generator";
+import { writeFile } from 'fs';
 
 export const generator = () => {
     const courseSchema: Schema = {
@@ -17,5 +18,9 @@ export const generator = () => {
     };
     
     const result = generate(courseSchema, config);
-    console.log(result);
+    writeFile(result.fileName, result.template, (err) => {
+        if (err) console.log(err);
+    });
 }
+
+generator();
