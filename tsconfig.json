@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "outDir": "dist"
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "module": "CommonJS"
   },
   "exclude": ["dist", "node_modules"]
 }
