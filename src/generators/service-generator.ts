@@ -1,12 +1,12 @@
 import { Config, Schema } from "../meta-models";
 import { buildNameVariations } from "../name-variations";
 
-const baseURI = '/api';
+const baseURI = "/api";
 
 export const generate = (schema: Schema, { scope }: Config) => {
-    const { ref, refs, model, models, singleParam } = buildNameVariations(schema);
-    const template = `
-import ${model} from '..';
+  const { ref, refs, model, models, singleParam } = buildNameVariations(schema);
+  const template = `
+import { ${model} } from './${model}';
 
 export const get${model} = (id: string) => {
     return fetch(\`${baseURI}/\${id}\`);
@@ -29,9 +29,9 @@ export const delete${model} = (${singleParam}) => {
 }
     `;
 
-    return {
-        template,
-        title: `${models} Service`,
-        fileName: `${refs}-service.ts`,
-    }
+  return {
+    template,
+    title: `${models} Service`,
+    fileName: `${refs}-service.ts`,
+  };
 };
