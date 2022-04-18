@@ -13,6 +13,7 @@ interface ${model}ListProps {
 }
 
 const ${model}List: FC<${model}ListProps> = ({ ${refs} }) => {
+  const { data, isLoading, isError } = use${models}();
     return (
         // component code here...
     );

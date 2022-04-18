@@ -6,15 +6,14 @@ const generate = (schema) => {
     const { ref, refs, model, models, singleParam } = (0, name_variations_1.buildNameVariations)(schema);
     const template = `
 import React, { useState, useEffect } from 'react';
-import { get${models} as get, create${model} as create, update${model} as update, delete${model} as del } from './${refs}-service';
-import { ${model} } from './${model}';
+import { get${models} as get, create${model} as create, update${model} as update, delete${model} as delete } from './${refs}-service';
 
 export const use${models} = () => {
-    const [${refs}, set${models}] = useState<${model}[]>([]);
+    const [${models}, set${models}] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    useEffect(() => {
+    usEffect(() => {
         setIsLoading(true);
         get()
             .then(res => res.json())
@@ -32,7 +31,7 @@ export const use${models} = () => {
         create(${ref})
             .then(() => {
                 setIsLoading(false);
-                set${models}([...${refs}, ${ref}])
+                set${models}([...${models}, ${ref}])
             })
             .catch(e => {
                 console.error(e);
@@ -40,16 +39,16 @@ export const use${models} = () => {
             });
     }
 
-    const update${model} = (${singleParam}) => {
+    update${model} = (${singleParam}) => {
         update(${ref})
             .then(() => {
                 setIsLoading(false);
-                const ${refs}Copy = ${refs}.map(x => {
+                const ${models}Copy = ${models}.map(x => {
                     if (x.id === ${ref}.id) {
-                        return ${ref};
+                        return $ref;
                     }
                 })
-                set${models}(${refs}Copy);
+                set${models}(${models}Copy);
             })
             .catch(e => {
                 console.error(e);
@@ -57,11 +56,11 @@ export const use${models} = () => {
             });
     }
 
-    const delete${model} = (${singleParam}) => {
-        del(${ref})
+    delete${model} = (${singleParam}) => {
+        delete(${ref.id})
             .then(() => {
                 setIsLoading(false);
-                set${models}(${refs}.filter(x => x.id !== ${ref.id}))
+                set${models}(${models}.filter(x => x.id !== ${ref.id}))
             })
             .catch(e => {
                 console.error(e);
@@ -69,7 +68,7 @@ export const use${models} = () => {
             });
     }
 
-    return { data: ${refs}, isLoading, isError, create${model}, update${model}, delete${model}, delete${models} };
+    return { data: ${models}, isLoading: loading, isError: error, create${model}, update${model}, delete${model}, delete${models} };
 }
 `;
     return {

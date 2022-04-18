@@ -5,6 +5,7 @@ import { generate } from "./generators/service-generator";
 import { generate as generateModel } from "./generators/model-generator";
 import { generate as generateDetailComponent } from "./generators/detail-component-generator";
 import { generate as generateListComponent } from "./generators/list-component-generator";
+import { generate as generateHooks } from "./generators/hook-generator";
 import { existsSync, mkdirSync, writeFile } from "fs";
 import { prompt, Separator } from "inquirer";
 
@@ -23,11 +24,9 @@ export const generator = (model: any, dir: string) => {
   };
 
   const detailComponentResult = generateDetailComponent(courseSchema);
-
   const listComponentResult = generateListComponent(courseSchema);
-
   const modelResult = generateModel(model, courseSchema);
-
+  const hookComponentResult = generateHooks(courseSchema);
   const result = generate(courseSchema, config);
 
   if (!existsSync(dir)) {
@@ -56,7 +55,22 @@ export const generator = (model: any, dir: string) => {
       if (err) console.log(err);
     }
   );
+  writeFile(
+    dir + "/" + hookComponentResult.fileName,
+    hookComponentResult.template,
+    (err) => {
+      if (err) console.log(err);
+    }
+  );
 };
+
+// generate:
+// component & test
+// component
+// test
+// service and hook
+// context
+// mock api
 
 prompt([
   {
