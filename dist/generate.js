@@ -54,6 +54,13 @@ const generator = (model, dir) => {
     });
 };
 exports.generator = generator;
+// generate:
+// component & test
+// component
+// test
+// service and hook
+// context
+// mock api
 (0, inquirer_1.prompt)([
     {
         type: "confirm",

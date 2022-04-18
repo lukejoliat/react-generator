@@ -6,7 +6,7 @@ const generate = (schema) => {
     const { ref, refs, model, models, singleParam } = (0, name_variations_1.buildNameVariations)(schema);
     const template = `
 import React, { useState, useEffect } from 'react';
-import { get${models} as get, create${model} as create, update${model} as update, delete${model} as del } from './${refs}-service';
+import { get${model} as getById, get${models} as get, create${model} as create, update${model} as update, delete${model} as del } from './${refs}-service';
 import { ${model} } from './${model}';
 
 export const use${models} = () => {
@@ -69,7 +69,41 @@ export const use${models} = () => {
             });
     }
 
-    return { data: ${refs}, isLoading, isError, create${model}, update${model}, delete${model}, delete${models} };
+    return { data: ${refs}, isLoading, isError, create${model}, update${model}, delete${model} };
+}
+
+export const use${model} = () => {
+    const [${ref}, set${model}] = useState<${model}>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+
+    useEffect(() => {
+        setIsLoading(true);
+        getById()
+            .then(res => res.json())
+            .then(data => {
+                setIsLoading(false);
+                set${model}(data);
+            })
+            .catch(e => {
+                console.error(e);
+                setIsError(true);
+            });
+    },[]);
+
+    const update${model} = (${singleParam}) => {
+        update(${ref})
+            .then(() => {
+                setIsLoading(false);
+                set${model}(${ref});
+            })
+            .catch(e => {
+                console.error(e);
+                setIsError(true);
+            });
+    }
+
+    return { data: ${refs}, isLoading, isError, update${model} };
 }
 `;
     return {
