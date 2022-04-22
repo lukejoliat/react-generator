@@ -1,6 +1,6 @@
 import { buildNameVariations } from "../name-variations";
 
-const generator = (schema) => {
+export const generate = (schema) => {
   const { ref, refs, model, models, singleParam } = buildNameVariations(schema);
   const template = `
 import {render, fireEvent, screen} from '@testing-library/react'

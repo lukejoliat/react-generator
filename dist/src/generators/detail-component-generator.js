@@ -13,8 +13,9 @@ interface ${model}DetailProps {
 }
 
 const ${model}Detail: FC<${model}DetailProps> = ({ ${ref} }) => {
+    const { data, isLoading, isError } = use${model}(${ref.id});
     return (
-        // component code here...
+        <h1>Detail Component</h1>
     );
 }
 
