@@ -9,8 +9,10 @@ import {setupServer} from 'msw/node'
 import ${model}Detail from './${model}Detail';
 
 const server = setupServer(
-    rest.get('/todos', (req, res, ctx) => {
-        return res(ctx.json({greeting: 'hello there'}))
+    rest.get('/${refs}/1', (req, res, ctx) => {
+        return res(ctx.json(
+          // return ${ref}
+        ))
     }),
 )
 
@@ -19,7 +21,7 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 test('Renders ${model}Detail', async () => {
-  render(<${model}Detail />)
+  render(<${model}Detail id={'1'} />)
 
   expect(screen.getByRole('heading')).toHaveTextContent('Detail Component');
 })

@@ -7,13 +7,14 @@ const generate = (schema) => {
     const template = `
 import React, { FC } from 'react';
 import { ${model} } from './${model}';
+import { use${model} } from './use${models}';
 
 interface ${model}DetailProps {
-    ${ref}: ${model}
+    id: string;
 }
 
-const ${model}Detail: FC<${model}DetailProps> = ({ ${ref} }) => {
-    const { data, isLoading, isError } = use${model}(${ref.id});
+const ${model}Detail: FC<${model}DetailProps> = ({ id }) => {
+    const { data, isLoading, isError } = use${model}(id);
     return (
         <h1>Detail Component</h1>
     );

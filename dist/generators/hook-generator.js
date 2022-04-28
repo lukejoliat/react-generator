@@ -72,14 +72,14 @@ export const use${models} = () => {
     return { data: ${refs}, isLoading, isError, create${model}, update${model}, delete${model} };
 }
 
-export const use${model} = () => {
-    const [${ref}, set${model}] = useState<${model}>([]);
+export const use${model} = (id: string) => {
+    const [${ref}, set${model}] = useState<${model}>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
-        getById()
+        getById(id)
             .then(res => res.json())
             .then(data => {
                 setIsLoading(false);

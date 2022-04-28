@@ -180,8 +180,8 @@ exports.generator = generator;
         message: "Please enter your schema name plural:",
     },
 ]).then((answers) => {
-    const { path, schema, select, schemeNameSing, schemaNamePlural } = answers;
+    const { path, schema, select, schemaNameSing, schemaNamePlural } = answers;
     if (!select)
         console.error("There was an error.");
-    (0, exports.generator)({ schema, schemeNameSing, schemaNamePlural }, path, select);
+    (0, exports.generator)({ schema, schemaNameSing, schemaNamePlural }, path, select);
 });

@@ -218,7 +218,7 @@ prompt([
     message: "Please enter your schema name plural:",
   },
 ]).then((answers) => {
-  const { path, schema, select, schemeNameSing, schemaNamePlural } = answers;
+  const { path, schema, select, schemaNameSing, schemaNamePlural } = answers;
   if (!select) console.error("There was an error.");
-  generator({ schema, schemeNameSing, schemaNamePlural }, path, select);
+  generator({ schema, schemaNameSing, schemaNamePlural }, path, select);
 });

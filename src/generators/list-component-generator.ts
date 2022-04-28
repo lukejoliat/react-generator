@@ -7,6 +7,7 @@ export const generate = (schema: Schema) => {
   const template = `
 import React, { FC } from 'react';
 import { ${model} } from './${model}';
+import { use${models} } from './use${models}';
 
 interface ${model}ListProps {
     ${refs}: ${model}[];
