@@ -10,141 +10,41 @@ const hook_generator_1 = require("./generators/hook-generator");
 const component_test_generator_1 = require("./generators/component-test-generator");
 const fs_1 = require("fs");
 const inquirer_1 = require("inquirer");
+const name_variations_1 = require("./name-variations");
+const constants_1 = require("./constants");
+const generateOutputDirectory = (dir) => {
+    if (!dir)
+        dir = "src";
+    if (!(0, fs_1.existsSync)(dir)) {
+        (0, fs_1.mkdirSync)(dir);
+    }
+};
 const generator = (schemaInfo, dir, choice) => {
-    const courseSchema = {
+    const schema = {
         model: schemaInfo.schemaNameSing,
         modelPlural: schemaInfo.schemaNamePlural,
     };
-    const config = {
-        name: "Workshop Config",
-        application: "dashboard",
-        scope: "acme",
+    const generators = {
+        detailComponentGenerator: detail_component_generator_1.generate,
+        listComponentGenerator: list_component_generator_1.generate,
+        modelGenerator: model_generator_1.generate,
+        hookGenerator: hook_generator_1.generate,
+        serviceGenerator: service_generator_1.generate,
+        componentTestGenerator: component_test_generator_1.generate,
     };
-    const generateOutputDirectory = (dir) => {
-        if (!dir)
-            dir = "src";
-        if (!(0, fs_1.existsSync)(dir)) {
-            (0, fs_1.mkdirSync)(dir);
-        }
-    };
-    const generateStack = (dir) => {
-        console.log("generating stack");
-        const detailComponentResult = (0, detail_component_generator_1.generate)(courseSchema);
-        const listComponentResult = (0, list_component_generator_1.generate)(courseSchema);
-        const testComponentResult = (0, component_test_generator_1.generate)(courseSchema);
-        const modelResult = (0, model_generator_1.generate)(schemaInfo.schema, courseSchema);
-        const hookComponentResult = (0, hook_generator_1.generate)(courseSchema);
-        const serviceResult = (0, service_generator_1.generate)(courseSchema, config);
-        (0, fs_1.writeFile)(dir + "/" + serviceResult.fileName, serviceResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + modelResult.fileName, modelResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + testComponentResult.fileName, testComponentResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + detailComponentResult.fileName, detailComponentResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + listComponentResult.fileName, listComponentResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + hookComponentResult.fileName, hookComponentResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-    };
-    const generateComponent = (dir) => {
-        const detailComponentResult = (0, detail_component_generator_1.generate)(courseSchema);
-        const testComponentResult = (0, component_test_generator_1.generate)(courseSchema);
-        const modelResult = (0, model_generator_1.generate)(schemaInfo.schema, courseSchema);
-        (0, fs_1.writeFile)(dir + "/" + modelResult.fileName, modelResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + testComponentResult.fileName, testComponentResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + detailComponentResult.fileName, detailComponentResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-    };
-    const generateTest = (dir) => {
-        const testComponentResult = (0, component_test_generator_1.generate)(courseSchema);
-        const modelResult = (0, model_generator_1.generate)(schemaInfo.schema, courseSchema);
-        (0, fs_1.writeFile)(dir + "/" + modelResult.fileName, modelResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + testComponentResult.fileName, testComponentResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-    };
-    const generateService = (dir) => {
-        const serviceComponentResult = (0, service_generator_1.generate)(courseSchema, config);
-        const modelResult = (0, model_generator_1.generate)(schemaInfo.schema, courseSchema);
-        (0, fs_1.writeFile)(dir + "/" + modelResult.fileName, modelResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + serviceComponentResult.fileName, serviceComponentResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-    };
-    const generateHook = (dir) => {
-        const serviceResult = (0, service_generator_1.generate)(courseSchema, config);
-        const hookResult = (0, hook_generator_1.generate)(courseSchema);
-        const modelResult = (0, model_generator_1.generate)(schemaInfo.schema, courseSchema);
-        (0, fs_1.writeFile)(dir + "/" + modelResult.fileName, modelResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + serviceResult.fileName, serviceResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-        (0, fs_1.writeFile)(dir + "/" + hookResult.fileName, hookResult.template, (err) => {
-            if (err)
-                console.log(err);
-        });
-    };
-    const generateApi = (dir) => {
-        console.log("Nothing to generate yet.");
-    };
+    const combo = constants_1.COMBOS[choice.toUpperCase()];
+    combo.push("model");
     generateOutputDirectory(dir);
-    switch (choice) {
-        case "stack":
-            generateStack(dir);
-            break;
-        case "component":
-            generateComponent(dir);
-            break;
-        case "test":
-            generateTest(dir);
-            break;
-        case "service":
-            generateService(dir);
-            break;
-        case "hook":
-            generateHook(dir);
-            break;
-        case "api":
-            generateApi(dir);
-            break;
-        default:
-            generateStack(dir);
-            break;
-    }
+    combo.forEach((generator) => {
+        const gName = `${(0, name_variations_1.camelCase)(generator)}Generator`;
+        const result = generator === "model"
+            ? generators[gName](schemaInfo.schema, schema)
+            : generators[gName](schema);
+        (0, fs_1.writeFile)(dir + "/" + result.fileName, result.template, (err) => {
+            if (err)
+                console.log(err);
+        });
+    });
 };
 exports.generator = generator;
 (0, inquirer_1.prompt)([
@@ -183,5 +83,10 @@ exports.generator = generator;
     const { path, schema, select, schemaNameSing, schemaNamePlural } = answers;
     if (!select)
         console.error("There was an error.");
-    (0, exports.generator)({ schema, schemaNameSing, schemaNamePlural }, path, select);
+    try {
+        (0, exports.generator)({ schema, schemaNameSing, schemaNamePlural }, path, select);
+    }
+    catch (error) {
+        console.error(error);
+    }
 });

@@ -3,7 +3,7 @@ import { buildNameVariations } from "../name-variations";
 
 const baseURI = "/api";
 
-export const generate = (schema: Schema, { scope }: Config) => {
+export const generate = (schema: Schema) => {
   const { ref, refs, model, models, singleParam } = buildNameVariations(schema);
   const template = `
 import { ${model} } from './${model}';
